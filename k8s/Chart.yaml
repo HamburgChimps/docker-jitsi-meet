@@ -2,10 +2,12 @@ apiVersion: v1
 name: jitsi-meet
 version: 1.0.0
 appVersion: 0.0.1
-description: jitsi deployment
+description: Jitsi Meet is a fully encrypted, 100% Open Source video conferencing solution that you can use all day, every day, for free — with no account needed.
 sources:
   - https://github.com/jitsi/docker-jitsi-meet
 maintainers: 
   - name: Aaron van Meerten
     email: aaron@jitsi.org
+  - name: Cornelio Hopmann
+    email: hopmann@gmail.com
 

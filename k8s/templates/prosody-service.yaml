@@ -17,5 +17,3 @@ spec:
     targetPort: 5347
   selector:
     service: prosody
-status:
-  loadBalancer: {}

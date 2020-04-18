@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -16,28 +16,28 @@ spec:
       containers:
       - env:
         - name: XMPP_DOMAIN
-          value: meet.jitsi
+          value: {{ .Values.xmpp.domain }}
         - name: XMPP_AUTH_DOMAIN
-          value: auth.meet.jitsi
+          value: {{ .Values.xmpp.auth.domain }}
         - name: XMPP_MUC_DOMAIN
-          value: muc.meet.jitsi
+          value: {{ .Values.xmpp.muc.domain }}
         - name: JICOFO_COMPONENT_SECRET
-          value: s3cr37
+          value: {{ .Values.jicofo.component.secret }}
         - name: JVB_COMPONENT_SECRET
-          value: s3cr3t
+          value: {{ .Values.jvb.component.secret }}
         - name: JICOFO_AUTH_USER
-          value: focus
+          value: {{ .Values.jicofo.auth.user }}
         - name: JICOFO_AUTH_PASSWORD
-          value: passw0rd
+          value: {{ .Values.jicofo.auth.password }}
         - name: JVB_AUTH_USER
-          value: jvb
+          value: {{ .Values.jvb.auth.user }}
         - name: JVB_AUTH_PASSWORD
-          value: passw0rd
+          value: {{ .Values.jvb.auth.password }}
         - name: XMPP_INTERNAL_MUC_DOMAIN
-          value: internal-muc.meet.jitsi
+          value: {{ .Values.xmpp.muc.internal }}
         - name: TZ
-          value: Europe/Paris
-        image: jitsi/prosody
+          value: {{ .Values.TZ }}
+        image: {{ .Values.prosody.image }}
         name: prosody
         ports:
         - containerPort: 5222

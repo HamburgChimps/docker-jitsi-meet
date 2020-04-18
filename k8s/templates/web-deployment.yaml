@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -16,18 +16,18 @@ spec:
       containers:
       - env:
         - name: JICOFO_AUTH_USER
-          value: focus
+          value: {{ .Values.jicofo.auth.user }}
         - name: XMPP_DOMAIN
-          value: meet.jitsi
+          value: {{ .Values.xmpp.domain }}
         - name: XMPP_AUTH_DOMAIN
-          value: auth.meet.jitsi
+          value: {{ .Values.xmpp.auth.domain }}
         - name: XMPP_BOSH_URL_BASE
           value: http://prosody:5280
         - name: XMPP_MUC_DOMAIN
-          value: muc.meet.jitsi
+          value: {{ .Values.xmpp.muc.domain }}
         - name: TZ
-          value: Europe/Paris
-        image: jitsi/web
+          value: {{ .Values.TZ }}
+        image: {{ .Values.web.image }}
         name: web
         ports:
         - containerPort: 80

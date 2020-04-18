@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -22,33 +22,33 @@ spec:
             fieldRef:
               fieldPath: status.hostIP
         - name: XMPP_DOMAIN
-          value: meet.jitsi
+          value: {{ .Values.xmpp.domain }}
         - name: XMPP_AUTH_DOMAIN
-          value: auth.meet.jitsi
+          value: {{ .Values.xmpp.auth.domain }}
         - name: JVB_PORT
-          value: "30000"
+          value: {{ .Values.jvb.port.udp | quote }}
         - name: JVB_TCP_PORT
-          value: "30001"
+          value: {{ .Values.jvb.port.tcp | quote }}
         - name: JVB_AUTH_USER
-          value: jvb
+          value: {{ .Values.jvb.auth.user }}
         - name: JVB_AUTH_PASSWORD
-          value: passw0rd
+          value: {{ .Values.jvb.auth.password }}
         - name: JVB_BREWERY_MUC
-          value: jvbbrewery
+          value: {{ .Values.jvb.muc }}
         - name: XMPP_INTERNAL_MUC_DOMAIN
-          value: internal-muc.meet.jitsi
+          value: {{ .Values.xmpp.domain.internal }}
         - name: JVB_STUN_SERVERS
-          value: stun.l.google.com:19302,stun1.l.google.com:19302,stun2.l.google.com:19302
+          value: {{ .Values.jvb.stunServers }}
         - name: JICOFO_AUTH_USER
-          value: focus
+          value: {{ .Values.jicofo.auth.user }}
         - name: TZ
-          value: Europe/Paris
-        image: 103425057857.dkr.ecr.us-west-2.amazonaws.com/jitsi/jvb
+          value: {{ .Values.TZ }}
+        image: {{ .Values.jvb.image }}
         name: jvb
         ports:
-        - containerPort: 30000
+        - containerPort: {{ .Values.jvb.port.udp }}
           protocol: UDP
-        - containerPort: 30001
+        - containerPort: {{ .Values.jvb.port.tcp }}
         resources: {}
       restartPolicy: Always
 status: {}
