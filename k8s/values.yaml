@@ -1,0 +1,82 @@
+# Default values for jitsi
+# Declare variables to be passed into your templates.
+replicaCount: 1
+
+nameOverride: ""
+fullnameOverride: ""
+nameSpaceOverride: ""
+
+TZ: Europe/Paris
+
+xmpp:
+  server: prosody
+  domain: meet.jitsi
+  auth:
+    domain: auth.meet.jitsi
+  muc:
+    domain: muc.meet.jitsi
+    internal: internal-muc.meet.jitsi
+
+prosody:
+  image: jitsi/prosody
+
+jicofo:
+  image: jitsi/jicofo
+  component:
+    secret: s3cr37
+  auth:
+    user: focus
+    password: passw0rd
+
+jvb:
+  image: jitsi/jvb
+  port:
+    tcp: 30001
+    udp: 30000
+  auth:
+    user: jvb
+    password: passw0rd
+  muc: jvbbrewery
+  stunServers: stun.l.google.com:19302,stun1.l.google.com:19302,stun2.l.google.com:19302
+
+web:
+  image: jitsi/web
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  paths: ["/"]
+  hosts:
+    - kube.jitsi.net
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+logging:
+  log_group_name: jitsi-meet

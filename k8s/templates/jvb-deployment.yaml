@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: {{ template "jitsi.namespace" . }}
+  name: jvb
   labels:
     service: jvb
-  name: jvb
 spec:
   replicas: 1
   strategy:
@@ -14,37 +15,37 @@ spec:
         service: jvb
     spec:
       containers:
-      - env:
-        - name: XMPP_SERVER
-          value: prosody
-        - name: DOCKER_HOST_ADDRESS
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: XMPP_DOMAIN
-          value: {{ .Values.xmpp.domain }}
-        - name: XMPP_AUTH_DOMAIN
-          value: {{ .Values.xmpp.auth.domain }}
-        - name: JVB_PORT
-          value: {{ .Values.jvb.port.udp | quote }}
-        - name: JVB_TCP_PORT
-          value: {{ .Values.jvb.port.tcp | quote }}
-        - name: JVB_AUTH_USER
-          value: {{ .Values.jvb.auth.user }}
-        - name: JVB_AUTH_PASSWORD
-          value: {{ .Values.jvb.auth.password }}
-        - name: JVB_BREWERY_MUC
-          value: {{ .Values.jvb.muc }}
-        - name: XMPP_INTERNAL_MUC_DOMAIN
-          value: {{ .Values.xmpp.domain.internal }}
-        - name: JVB_STUN_SERVERS
-          value: {{ .Values.jvb.stunServers }}
-        - name: JICOFO_AUTH_USER
-          value: {{ .Values.jicofo.auth.user }}
-        - name: TZ
-          value: {{ .Values.TZ }}
+      - name: jvb
         image: {{ .Values.jvb.image }}
-        name: jvb
+        env:
+          - name: XMPP_SERVER
+            value: prosody
+          - name: DOCKER_HOST_ADDRESS
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: XMPP_DOMAIN
+            value: {{ .Values.xmpp.domain }}
+          - name: XMPP_AUTH_DOMAIN
+            value: {{ .Values.xmpp.auth.domain }}
+          - name: JVB_PORT
+            value: {{ .Values.jvb.port.udp | quote }}
+          - name: JVB_TCP_PORT
+            value: {{ .Values.jvb.port.tcp | quote }}
+          - name: JVB_AUTH_USER
+            value: {{ .Values.jvb.auth.user }}
+          - name: JVB_AUTH_PASSWORD
+            value: {{ .Values.jvb.auth.password }}
+          - name: JVB_BREWERY_MUC
+            value: {{ .Values.jvb.muc }}
+          - name: XMPP_INTERNAL_MUC_DOMAIN
+            value: {{ .Values.xmpp.domain.internal }}
+          - name: JVB_STUN_SERVERS
+            value: {{ .Values.jvb.stunServers }}
+          - name: JICOFO_AUTH_USER
+            value: {{ .Values.jicofo.auth.user }}
+          - name: TZ
+            value: {{ .Values.TZ }}
         ports:
         - containerPort: {{ .Values.jvb.port.udp }}
           protocol: UDP

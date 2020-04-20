@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: {{ template "jitsi.namespace" . }}
+  name: web
   labels:
     service: web
-  name: web
 spec:
   replicas: 1
   strategy:
@@ -14,7 +15,9 @@ spec:
         service: web
     spec:
       containers:
-      - env:
+      - name: web
+        image: {{ .Values.web.image }}
+        env:
         - name: JICOFO_AUTH_USER
           value: {{ .Values.jicofo.auth.user }}
         - name: XMPP_DOMAIN
@@ -27,8 +30,6 @@ spec:
           value: {{ .Values.xmpp.muc.domain }}
         - name: TZ
           value: {{ .Values.TZ }}
-        image: {{ .Values.web.image }}
-        name: web
         ports:
         - containerPort: 80
         - containerPort: 443

@@ -2,6 +2,7 @@
 apiVersion: apps/v1
 kind: Ingress
 metadata:
+  namespace: {{ template "jitsi.namespace" . }}
   name: webingress
 spec:
 {{- if .Values.ingress.tls }}

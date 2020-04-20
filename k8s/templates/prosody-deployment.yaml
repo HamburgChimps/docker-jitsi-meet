@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: {{ template "jitsi.namespace" . }}
+  name: prosody
   labels:
     service: prosody
-  name: prosody
 spec:
   replicas: 1
   strategy:
@@ -14,7 +15,9 @@ spec:
         service: prosody
     spec:
       containers:
-      - env:
+      - name: prosody
+        image: {{ .Values.prosody.image }}
+        env:
         - name: XMPP_DOMAIN
           value: {{ .Values.xmpp.domain }}
         - name: XMPP_AUTH_DOMAIN
@@ -37,8 +40,6 @@ spec:
           value: {{ .Values.xmpp.muc.internal }}
         - name: TZ
           value: {{ .Values.TZ }}
-        image: {{ .Values.prosody.image }}
-        name: prosody
         ports:
         - containerPort: 5222
         - containerPort: 5280
