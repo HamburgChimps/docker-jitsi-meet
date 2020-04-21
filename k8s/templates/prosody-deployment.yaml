@@ -7,6 +7,9 @@ metadata:
     service: prosody
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      service: prosody
   strategy:
     type: Recreate
   template:
@@ -25,17 +28,29 @@ spec:
         - name: XMPP_MUC_DOMAIN
           value: {{ .Values.xmpp.muc.domain }}
         - name: JICOFO_COMPONENT_SECRET
-          value: {{ .Values.jicofo.component.secret }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.jicofo.existingSecret | default (include "jitsi.jicofo.secret" .) }}
+              key: component-secret
         - name: JVB_COMPONENT_SECRET
-          value: {{ .Values.jvb.component.secret }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.jvb.existingSecret | default (include "jitsi.jvb.secret" .) }}
+              key: component-secret
         - name: JICOFO_AUTH_USER
           value: {{ .Values.jicofo.auth.user }}
         - name: JICOFO_AUTH_PASSWORD
-          value: {{ .Values.jicofo.auth.password }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.jicofo.existingSecret | default (include "jitsi.jicofo.secret" .) }}
+              key: auth-password
         - name: JVB_AUTH_USER
           value: {{ .Values.jvb.auth.user }}
         - name: JVB_AUTH_PASSWORD
-          value: {{ .Values.jvb.auth.password }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.jvb.existingSecret | default (include "jitsi.jvb.secret" .) }}
+              key: auth-password
         - name: XMPP_INTERNAL_MUC_DOMAIN
           value: {{ .Values.xmpp.muc.internal }}
         - name: TZ

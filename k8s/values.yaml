@@ -8,6 +8,7 @@ nameSpaceOverride: ""
 
 TZ: Europe/Paris
 
+
 xmpp:
   server: prosody
   domain: meet.jitsi
@@ -22,20 +23,19 @@ prosody:
 
 jicofo:
   image: jitsi/jicofo
-  component:
-    secret: s3cr37
+  existingSecret: ""
   auth:
     user: focus
-    password: passw0rd
 
 jvb:
   image: jitsi/jvb
+  existingSecret: ""
+  loadBalancerIP: 192.168.178.41
   port:
     tcp: 30001
     udp: 30000
   auth:
     user: jvb
-    password: passw0rd
   muc: jvbbrewery
   stunServers: stun.l.google.com:19302,stun1.l.google.com:19302,stun2.l.google.com:19302
 

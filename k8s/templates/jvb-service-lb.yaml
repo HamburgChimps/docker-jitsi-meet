@@ -2,17 +2,37 @@ apiVersion: v1
 kind: Service
 metadata:
   namespace: {{ template "jitsi.namespace" . }}
-  name: jvb
+  name: jvb-udp
   labels:
     app: jitsi
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
 spec:
   type: LoadBalancer
+  loadBalancerIP: {{ .Values.jvb.loadBalancerIP }}
   ports:
-  - name: JVB_UDP
+  - name: jvb-udp
     port: {{ .Values.jvb.port.udp }}
     protocol: UDP
     targetPort: {{ .Values.jvb.port.udp }}
-  - name: JVB_TCP
+  selector:
+    service: jvb
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ template "jitsi.namespace" . }}
+  name: jvb-tcp
+  labels:
+    app: jitsi
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: {{ .Values.jvb.loadBalancerIP }}
+  ports:
+  - name: jvb-tcp
     port: {{ .Values.jvb.port.tcp }}
     protocol: TCP
     targetPort: {{ .Values.jvb.port.tcp}}

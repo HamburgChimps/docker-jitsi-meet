@@ -7,6 +7,9 @@ metadata:
     service: jvb
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      service: jvb
   strategy:
     type: Recreate
   template:
@@ -21,9 +24,7 @@ spec:
           - name: XMPP_SERVER
             value: prosody
           - name: DOCKER_HOST_ADDRESS
-            valueFrom:
-              fieldRef:
-                fieldPath: status.hostIP
+            value: {{ .Values.jvb.loadBalancerIP }}
           - name: XMPP_DOMAIN
             value: {{ .Values.xmpp.domain }}
           - name: XMPP_AUTH_DOMAIN
@@ -32,14 +33,22 @@ spec:
             value: {{ .Values.jvb.port.udp | quote }}
           - name: JVB_TCP_PORT
             value: {{ .Values.jvb.port.tcp | quote }}
+          - name: JVB_COMPONENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.jvb.existingSecret | default (include "jitsi.jvb.secret" .) }}
+                key: component-secret
           - name: JVB_AUTH_USER
             value: {{ .Values.jvb.auth.user }}
           - name: JVB_AUTH_PASSWORD
-            value: {{ .Values.jvb.auth.password }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.jvb.existingSecret | default (include "jitsi.jvb.secret" .) }}
+                key: auth-password
           - name: JVB_BREWERY_MUC
             value: {{ .Values.jvb.muc }}
           - name: XMPP_INTERNAL_MUC_DOMAIN
-            value: {{ .Values.xmpp.domain.internal }}
+            value: {{ .Values.xmpp.muc.internal }}
           - name: JVB_STUN_SERVERS
             value: {{ .Values.jvb.stunServers }}
           - name: JICOFO_AUTH_USER

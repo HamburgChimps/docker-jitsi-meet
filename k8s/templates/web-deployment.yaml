@@ -7,6 +7,9 @@ metadata:
     service: web
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      service: web
   strategy:
     type: Recreate
   template:

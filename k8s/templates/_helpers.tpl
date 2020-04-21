@@ -31,3 +31,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     {{- .Release.Namespace -}}
   {{- end -}}
 {{- end -}}
+
+{{- define "jitsi.jicofo.secret" -}}
+{{ printf "%s-jicofo" (include "jitsi.fullname" .) }}
+{{- end -}}
+
+{{- define "jitsi.jvb.secret" -}}
+{{ printf "%s-jvb" (include "jitsi.fullname" .) }}
+{{- end -}}

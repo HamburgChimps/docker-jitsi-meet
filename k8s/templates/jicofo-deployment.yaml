@@ -7,6 +7,9 @@ metadata:
     service: jicofo
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      service: jicofo
   strategy:
     type: Recreate
   template:
@@ -19,21 +22,27 @@ spec:
         image: {{ .Values.jicofo.image}}
         env:
         - name: XMPP_SERVER
-          value: {{ .Values.jicofo.xmpp.server }}
+          value: {{ .Values.xmpp.server }}
         - name: XMPP_DOMAIN
-          value: {{ .Values.jicofo.xmpp.domain }}
+          value: {{ .Values.xmpp.domain }}
         - name: XMPP_AUTH_DOMAIN
-          value: {{ .Values.jicofo.xmpp.auth.domain }}
+          value: {{ .Values.xmpp.auth.domain }}
         - name: JICOFO_COMPONENT_SECRET
-          value: { .Values.jicofo.component.secret }
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.jicofo.existingSecret | default (include "jitsi.jicofo.secret" .) }}
+              key: component-secret
         - name: JICOFO_AUTH_USER
           value: {{ .Values.jicofo.auth.user }}
         - name: JICOFO_AUTH_PASSWORD
-          value: {{ .Values.jicofo.auth.password }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.jicofo.existingSecret | default (include "jitsi.jicofo.secret" .) }}
+              key: auth-password
         - name: JVB_BREWERY_MUC
-          value: jvbbrewery
+          value: {{ .Values.jvb.muc }}
         - name: XMPP_INTERNAL_MUC_DOMAIN
-          value: internal-muc.meet.jitsi
+          value: {{ .Values.xmpp.muc.internal }}
         - name: TZ
           value: {{ .Values.TZ }}
         resources: {}
